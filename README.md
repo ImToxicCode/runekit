@@ -1,4 +1,4 @@
-# RuneKit
+# RuneKit Plugin
 This plugin sends notifications on certain completed tasks when using the runekit mobile app.
 
 # The App
