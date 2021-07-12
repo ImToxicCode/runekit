@@ -149,12 +149,12 @@ public class FarmingService {
             for (FarmingPatch patch : entry.getValue().getPatches()) {
                 String key = entry.getValue().getName() + ":" + patch.getProduce().name() + ":" + patch.getVarbit();
                 String value = configManager.getRSProfileConfiguration(runekitConfig.CONFIG_GROUP, key);
+                log.debug(value);
                 if (value != null) {
                     try {
-                        int id = client.getVarbitValue(patch.getVarbit().getId());
-                        storedData.put(key, id);
+                        storedData.put(key, Integer.valueOf(value));
                     } catch (Exception ex) {
-
+                        log.debug(ex.getMessage());
                     }
                 }
             }
@@ -177,12 +177,11 @@ public class FarmingService {
                     int old = storedData.get(key) == null ? -1 : storedData.get(key);
                     int id = client.getVarbitValue(patch.getVarbit().getId());
                     if (id != old) {
-                        String patch_name = (patch.getProduce().name().split("_")[0].equals("ALLOTMENT")) ? patch.getProduce().name().split("_")[0]+"_1" : patch.getProduce().name().split("_")[0];
+                        String patch_name = (patch.getProduce().name().split("_")[0].equals("ALLOTMENT")) ? patch.getProduce().name().split("_")[0]+"_1" : patch.getProduce().name();
                         log.debug( patch_name + ": " + old + " -> " + id);
                         List<PatchType> types = Arrays.asList(PatchType.values()).stream().filter(t -> t.getStage() == id && t.getType().name().equals(patch_name)).collect(Collectors.toList());
                         if (types.stream().count() > 0) {
                             PatchType type = types.stream().findFirst().get();
-                            //log.debug(type.getName() + " : " + old + " -> " + id);
                             if (old <= 3 && id == type.getStage()) {
                                 NotificationRequest request = new NotificationRequest();
                                 request.Minutes = type.getMinutes();
