@@ -39,13 +39,12 @@ public class BirdHouseService {
         for (BirdHouseTile space : BirdHouseTile.values()) {
             String key = space.getName();
             String value = configManager.getRSProfileConfiguration(runekitConfig.CONFIG_GROUP, key);
-
+            log.debug(value);
             if (value != null) {
                 try {
-                    int id = client.getVar(space.getVarPlayer());
-                    storedData.put(key, id);
+                    storedData.put(key, Integer.valueOf(value));
                 } catch (Exception ex) {
-
+                    log.debug(ex.getMessage());
                 }
             }
         }
