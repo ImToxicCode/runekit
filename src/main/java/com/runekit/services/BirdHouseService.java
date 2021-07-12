@@ -1,7 +1,6 @@
 package com.runekit.services;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.runekit.RunekitConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +10,13 @@ import net.runelite.api.Client;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.config.ConfigManager;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Singleton
@@ -21,6 +25,7 @@ public class BirdHouseService {
     private final Client client;
     private final ConfigManager configManager;
     private final RunekitConfig runekitConfig;
+    private final ScheduledExecutorService _scheduledExecutorService;
 
     private static ImmutableSet<Integer> FOSSIL_ISLAND_REGIONS = ImmutableSet.of(14650, 14651, 14652, 14906, 14907, 15162, 15163);
 
@@ -31,6 +36,7 @@ public class BirdHouseService {
         this.client = client;
         this.configManager = configManager;
         this.runekitConfig = runekitConfig;
+        this._scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     }
 
     public void loadCurrentConfig() {
@@ -39,13 +45,12 @@ public class BirdHouseService {
         for (BirdHouseTile space : BirdHouseTile.values()) {
             String key = space.getName();
             String value = configManager.getRSProfileConfiguration(runekitConfig.CONFIG_GROUP, key);
-
+            log.debug(value);
             if (value != null) {
                 try {
-                    int id = client.getVar(space.getVarPlayer());
-                    storedData.put(key, id);
+                    storedData.put(key, Integer.valueOf(value));
                 } catch (Exception ex) {
-
+                    log.debug(ex.getMessage());
                 }
             }
         }
@@ -70,8 +75,12 @@ public class BirdHouseService {
 
                         try {
                             log.debug("Creating notification-" + request.Name);
-                            RunekitClient _client = new RunekitClient(runekitConfig.username(), runekitConfig.token(), request);
-                            new Thread(_client).start();
+                            _scheduledExecutorService.schedule(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new RunekitClient(runekitConfig.username(), runekitConfig.token()).createBirdhouseNotification(request);
+                                }
+                            }, 30, TimeUnit.MILLISECONDS);
                         } catch (Exception ex) {
                             log.debug(ex.getMessage());
                         }
