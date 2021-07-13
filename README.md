@@ -1,5 +1,5 @@
 # RuneKit Plugin
-This plugin sends notifications on certain completed tasks when using the runekit mobile app.
+This plugin notifies the runekit servers details about in-game information. This will trigger notifications to the runekit mobile app.
 
 # The App
 <h3>Web:</h3> https://www.runekit.net/ <br />
