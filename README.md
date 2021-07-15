@@ -7,6 +7,7 @@ This plugin notifies the runekit servers details about in-game information. This
 <h3>IOS:</h3> Coming Soon!
 
 # Notification Triggers -
+<li>When raid member has disconnected. (In-game only and other raid members must have plugin installed)</li> </br>
 <li>Farming patches fully grown.</li> </br>
 <li>Birdhouses ready for dismantle.</li> </br>
 
