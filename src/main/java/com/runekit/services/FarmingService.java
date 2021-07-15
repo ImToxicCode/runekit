@@ -1,6 +1,5 @@
 package com.runekit.services;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.runekit.RunekitConfig;
 import com.runekit.models.*;
@@ -8,9 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Varbits;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 
+import javax.inject.Inject;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -22,12 +26,15 @@ public class FarmingService {
     private final RunekitConfig runekitConfig;
     private final Map<String, Integer> storedData = new HashMap<>();
     private final Map<Integer[], FarmingRegion> farmingRegionMap = new HashMap<>();
+    private final ScheduledExecutorService _scheduledExecutorService;
 
     @Inject
     private FarmingService(Client client, ConfigManager configManager, RunekitConfig runekitConfig) {
         this.client = client;
         this.configManager = configManager;
         this.runekitConfig = runekitConfig;
+        this._scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.storedData.clear();
 
         List<FarmingPatch> spirtTreePatch = new ArrayList<>();
         spirtTreePatch.add(new FarmingPatch(Varbits.FARMING_4771, FarmingProduce.SPIRIT));
@@ -191,8 +198,12 @@ public class FarmingService {
 
                                 try {
                                     log.debug("Creating notification-" + request.Name);
-                                    RunekitClient _client = new RunekitClient(runekitConfig.username(), runekitConfig.token(), request);
-                                    new Thread(_client).start();
+                                    _scheduledExecutorService.schedule(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new RunekitClient(runekitConfig.username(), runekitConfig.token()).createFarmPatchNotification(request);
+                                        }
+                                    }, 30, TimeUnit.MILLISECONDS);
                                 } catch (Exception ex) {
                                     log.debug(ex.getMessage());
                                 }
