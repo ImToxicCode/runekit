@@ -148,8 +148,10 @@ public class RunekitPlugin extends Plugin {
 
     @Subscribe
     public void onGameTick(GameTick t) {
-        birdHouseService.updateStoredData(client.getLocalPlayer().getWorldLocation());
-        farmingService.updateStoredData(client.getLocalPlayer().getWorldLocation());
+        if(runekitConfig.token() != null || runekitConfig.token().trim() != "") {
+            birdHouseService.updateStoredData(client.getLocalPlayer().getWorldLocation());
+            farmingService.updateStoredData(client.getLocalPlayer().getWorldLocation());
+        }
     }
 
     private void checkPing() {
