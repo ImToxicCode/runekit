@@ -29,6 +29,9 @@ public class BirdHouseService {
 
     private static ImmutableSet<Integer> FOSSIL_ISLAND_REGIONS = ImmutableSet.of(14650, 14651, 14652, 14906, 14907, 15162, 15163);
 
+    private static ImmutableSet<Integer> nonseededHouses = ImmutableSet.of(1, 4, 7, 10, 13, 16, 19, 22, 25);
+    private static ImmutableSet<Integer> seededHouses = ImmutableSet.of(3, 6, 9, 12, 15, 18, 21, 24, 27);
+
     private final Map<String, Integer> storedData = new HashMap<>();
 
     @Inject
@@ -45,7 +48,7 @@ public class BirdHouseService {
         for (BirdHouseTile space : BirdHouseTile.values()) {
             String key = space.getName();
             String value = configManager.getRSProfileConfiguration(runekitConfig.CONFIG_GROUP, key);
-            log.debug(value);
+            //log.debug(value);
             if (value != null) {
                 try {
                     storedData.put(key, Integer.valueOf(value));
@@ -66,7 +69,7 @@ public class BirdHouseService {
                 int old = storedData.get(space.getName()) == null ? -1 : storedData.get(space.getName());
 
                 if (id != old) {
-                    if (old == 19 && id == 21) {
+                    if (id % 3 == 0 && nonseededHouses.contains(old) && seededHouses.contains(id)) {
                         NotificationRequest request = new NotificationRequest();
                         request.Minutes = 50;
                         request.Name = space.getName();

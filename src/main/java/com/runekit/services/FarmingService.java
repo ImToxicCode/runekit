@@ -156,7 +156,7 @@ public class FarmingService {
             for (FarmingPatch patch : entry.getValue().getPatches()) {
                 String key = entry.getValue().getName() + ":" + patch.getProduce().name() + ":" + patch.getVarbit();
                 String value = configManager.getRSProfileConfiguration(runekitConfig.CONFIG_GROUP, key);
-                log.debug(value);
+                //log.debug(value);
                 if (value != null) {
                     try {
                         storedData.put(key, Integer.valueOf(value));

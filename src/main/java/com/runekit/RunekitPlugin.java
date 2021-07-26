@@ -70,8 +70,8 @@ public class RunekitPlugin extends Plugin {
         farmingService.loadCurrentConfig();
         birdHouseService.loadCurrentConfig();
 
-        scheduledFuturePing = executorService.scheduleAtFixedRate(this::checkPing, 30, 30, TimeUnit.SECONDS);
-        scheduledFutureCheckDC = executorService.scheduleAtFixedRate(this::checkForDCMembers, 30, 30, TimeUnit.SECONDS);
+        scheduledFuturePing = executorService.scheduleAtFixedRate(this::checkPing, 10, 20, TimeUnit.SECONDS);
+        scheduledFutureCheckDC = executorService.scheduleAtFixedRate(this::checkForDCMembers, 10, 20, TimeUnit.SECONDS);
 
         //add quest tracker service -- future update
     }
@@ -96,7 +96,6 @@ public class RunekitPlugin extends Plugin {
 
     @Subscribe
     public void onConfigChanged(ConfigChanged configChanged) {
-        log.debug(configChanged.getGroup());
         if (!configChanged.getGroup().equals("runekit")) {
             return;
         } else {
@@ -118,7 +117,6 @@ public class RunekitPlugin extends Plugin {
         }
 
         if (!raidEstablished) {
-            log.debug(String.valueOf(raidPartyId));
             if (tempInCox && isLoggedIn) {
                 log.debug("JOINED COX! RAID: " + raidPartyId);
                 inCOX = true;
@@ -156,7 +154,7 @@ public class RunekitPlugin extends Plugin {
 
     private void checkPing() {
         log.debug("Ping!");
-        if (raidEstablished) {
+        if (raidEstablished && raidPartyId > 0) {
             if (inCOX) {
                 log.debug("COX raiding....");
                 raidCoxPingerService.ping(raidPartyId, "COX", client.getLocalPlayer().getName());
