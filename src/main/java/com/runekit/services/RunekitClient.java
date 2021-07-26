@@ -78,7 +78,7 @@ public class RunekitClient implements Runnable {
             Response response = call.execute();
 
             if (response.code() == 200) {
-                log.debug("Notification - Successful: " + response.code());
+                log.debug("Bird house placed: " + response.code());
             } else {
                 log.debug("Notification - Failed: " + response.code());
             }
@@ -110,7 +110,7 @@ public class RunekitClient implements Runnable {
             Response response = call.execute();
 
             if (response.code() == 200) {
-                log.debug("Notification - Successful: " + response.code());
+                log.debug("Crop planted: " + response.code());
             } else {
                 log.debug("Notification - Failed: " + response.code());
             }
@@ -140,7 +140,7 @@ public class RunekitClient implements Runnable {
             Response response = call.execute();
 
             if (response.code() == 200) {
-                log.debug("Successful: " + response.code());
+                //log.debug("Successful: " + response.code());
             } else {
                 log.debug("Failed: " + response.code());
             }
@@ -169,7 +169,7 @@ public class RunekitClient implements Runnable {
             Response response = call.execute();
 
             if (response.code() == 200) {
-                log.debug("Successful: " + response.code());
+                //log.debug("Successful: " + response.code());
             } else {
                 log.debug("Failed: " + response.code());
             }

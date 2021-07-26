@@ -185,7 +185,7 @@ public class FarmingService {
                     int id = client.getVarbitValue(patch.getVarbit().getId());
                     if (id != old) {
                         String patch_name = (patch.getProduce().name().split("_")[0].equals("ALLOTMENT")) ? patch.getProduce().name().split("_")[0]+"_1" : patch.getProduce().name();
-                        log.debug( patch_name + ": " + old + " -> " + id);
+                        //log.debug( patch_name + ": " + old + " -> " + id);
                         List<PatchType> types = Arrays.asList(PatchType.values()).stream().filter(t -> t.getStage() == id && t.getType().name().equals(patch_name)).collect(Collectors.toList());
                         if (types.stream().count() > 0) {
                             PatchType type = types.stream().findFirst().get();
