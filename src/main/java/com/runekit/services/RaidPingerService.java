@@ -11,7 +11,6 @@ import net.runelite.client.config.ConfigManager;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -19,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Singleton
-public class RaidCoxPingerService {
+public class RaidPingerService {
 
     private final Client client;
     private final ConfigManager configManager;
@@ -28,7 +27,7 @@ public class RaidCoxPingerService {
     private final Notifier _notifier;
 
     @Inject
-    private RaidCoxPingerService(Client client, ConfigManager configManager, RunekitConfig runekitConfig, Notifier notifier) {
+    private RaidPingerService(Client client, ConfigManager configManager, RunekitConfig runekitConfig, Notifier notifier) {
         this.client = client;
         this.configManager = configManager;
         this.runekitConfig = runekitConfig;
@@ -38,7 +37,7 @@ public class RaidCoxPingerService {
 
     public boolean checker(int raidPartyId) {
         try {
-            log.debug("Checking....");
+            //log.debug("Checking....");
             _scheduledExecutorService.schedule(new Runnable() {
                 @Override
                 public void run() {
@@ -91,7 +90,7 @@ public class RaidCoxPingerService {
         request.PlayerName = playerName;
 
         try {
-            log.debug("Ping");
+            //log.debug("Ping");
             _scheduledExecutorService.schedule(new Runnable() {
                 @Override
                 public void run() {

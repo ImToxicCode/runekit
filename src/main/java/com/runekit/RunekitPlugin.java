@@ -3,7 +3,7 @@ package com.runekit;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
 
-import com.runekit.services.RaidCoxPingerService;
+import com.runekit.services.RaidPingerService;
 import net.runelite.api.*;
 import com.runekit.services.BirdHouseService;
 import com.runekit.services.FarmingService;
@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.VarbitChanged;
-import net.runelite.client.Notifier;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -39,11 +38,9 @@ public class RunekitPlugin extends Plugin {
     @Inject
     private ConfigManager configManager;
     @Inject
-    private RaidCoxPingerService raidCoxPingerService;
+    private RaidPingerService raidPingerService;
     @Inject
     private WorldService worldService;
-    @Inject
-    private Notifier notifier;
     @Inject
     private ScheduledExecutorService executorService;
 
@@ -70,8 +67,8 @@ public class RunekitPlugin extends Plugin {
         farmingService.loadCurrentConfig();
         birdHouseService.loadCurrentConfig();
 
-        scheduledFuturePing = executorService.scheduleAtFixedRate(this::checkPing, 10, 20, TimeUnit.SECONDS);
-        scheduledFutureCheckDC = executorService.scheduleAtFixedRate(this::checkForDCMembers, 10, 20, TimeUnit.SECONDS);
+        scheduledFuturePing = executorService.scheduleAtFixedRate(this::checkPing, 0, 10, TimeUnit.SECONDS);
+        scheduledFutureCheckDC = executorService.scheduleAtFixedRate(this::checkForDCMembers, 0, 8, TimeUnit.SECONDS);
 
         //add quest tracker service -- future update
     }
@@ -91,6 +88,9 @@ public class RunekitPlugin extends Plugin {
             isLoggedIn = true;
         } else if (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.CONNECTION_LOST) {
             isLoggedIn = false;
+            inTOB = false;
+            inCOX = false;
+            raidEstablished = false;
         }
     }
 
@@ -135,13 +135,13 @@ public class RunekitPlugin extends Plugin {
                 log.debug("LEFT COX!");
                 inCOX = false;
                 raidEstablished = false;
-                raidCoxPingerService.leaveRaid(raidPartyId, "COX", client.getLocalPlayer().getName());
+                raidPingerService.leaveRaid(raidPartyId, "COX", client.getLocalPlayer().getName());
             }
             if (tempInTob != inTOB) {
                 log.debug("LEFT TOB!");
                 inTOB = false;
                 raidEstablished = false;
-                raidCoxPingerService.leaveRaid(raidPartyId, "TOB", client.getLocalPlayer().getName());
+                raidPingerService.leaveRaid(raidPartyId, "TOB", client.getLocalPlayer().getName());
             }
         }
     }
@@ -155,15 +155,14 @@ public class RunekitPlugin extends Plugin {
     }
 
     private void checkPing() {
-        log.debug("Ping!");
-        if (raidEstablished && raidPartyId > 0) {
+        if (isLoggedIn && raidEstablished && raidPartyId > 0) {
             if (inCOX) {
                 log.debug("COX raiding....");
-                raidCoxPingerService.ping(raidPartyId, "COX", client.getLocalPlayer().getName());
+                raidPingerService.ping(raidPartyId, "COX", client.getLocalPlayer().getName());
             }
             if (inTOB) {
                 log.debug("TOB raiding....");
-                raidCoxPingerService.ping(raidPartyId, "TOB", client.getLocalPlayer().getName());
+                raidPingerService.ping(raidPartyId, "TOB", client.getLocalPlayer().getName());
             }
         }
     }
@@ -171,7 +170,7 @@ public class RunekitPlugin extends Plugin {
     private void checkForDCMembers() {
         if (raidEstablished) {
             if(isLoggedIn) {
-                raidCoxPingerService.checker(raidPartyId);
+                raidPingerService.checker(raidPartyId);
             }
         }
     }
