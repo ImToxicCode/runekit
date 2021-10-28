@@ -82,12 +82,12 @@ public class FarmingService {
         prifddinasPatches.add(new FarmingPatch(Varbits.FARMING_4775, FarmingProduce.CRYSTAL));
 
         List<FarmingPatch> fossileIslandPatches = new ArrayList<>();
-        fossileIslandPatches.add(new FarmingPatch(Varbits.FARMING_4771, FarmingProduce.SPECIAL_TREE));
-        fossileIslandPatches.add(new FarmingPatch(Varbits.FARMING_4772, FarmingProduce.SPECIAL_TREE));
-        fossileIslandPatches.add(new FarmingPatch(Varbits.FARMING_4773, FarmingProduce.SPECIAL_TREE));
+        fossileIslandPatches.add(new FarmingPatch(Varbits.FARMING_4771, FarmingProduce.HARD_WOOD_1));
+        fossileIslandPatches.add(new FarmingPatch(Varbits.FARMING_4772, FarmingProduce.HARD_WOOD_2));
+        fossileIslandPatches.add(new FarmingPatch(Varbits.FARMING_4773, FarmingProduce.HARD_WOOD_3));
 
         List<FarmingPatch> bwoWannaiPatches = new ArrayList<>();
-        bwoWannaiPatches.add(new FarmingPatch(Varbits.FARMING_4771, FarmingProduce.SPECIAL_TREE));
+        bwoWannaiPatches.add(new FarmingPatch(Varbits.FARMING_4771, FarmingProduce.CALQUAT));
 
         List<FarmingPatch> seaweedPatches = new ArrayList<>();
         seaweedPatches.add(new FarmingPatch(Varbits.FARMING_4771, FarmingProduce.SEAWEED));
@@ -109,7 +109,7 @@ public class FarmingService {
         farmingGuildPatches.add(new FarmingPatch(Varbits.FARMING_7905, FarmingProduce.TREE));
         farmingGuildPatches.add(new FarmingPatch(Varbits.FARMING_7909, FarmingProduce.FRUIT_TREE));
         farmingGuildPatches.add(new FarmingPatch(Varbits.FARMING_7907, FarmingProduce.REDWOOD));
-        farmingGuildPatches.add(new FarmingPatch(Varbits.FARMING_7910, FarmingProduce.SPECIAL_TREE));
+        farmingGuildPatches.add(new FarmingPatch(Varbits.FARMING_7910, FarmingProduce.CELASTRUS));
         farmingGuildPatches.add(new FarmingPatch(Varbits.FARMING_4772, FarmingProduce.BUSH));
         farmingGuildPatches.add(new FarmingPatch(Varbits.FARMING_7904, FarmingProduce.CACTUS));
         farmingGuildPatches.add(new FarmingPatch(Varbits.FARMING_4771, FarmingProduce.SPIRIT));
@@ -184,7 +184,7 @@ public class FarmingService {
                     int old = storedData.get(key) == null ? -1 : storedData.get(key);
                     int id = client.getVarbitValue(patch.getVarbit().getId());
                     if (id != old) {
-                        String patch_name = (patch.getProduce().name().split("_")[0].equals("ALLOTMENT")) ? patch.getProduce().name().split("_")[0]+"_1" : patch.getProduce().name();
+                        String patch_name = (patch.getProduce().name().split("_")[0].equals("ALLOTMENT") || patch.getProduce().name().split("_")[0].equals("HARD_WOOD")) ? patch.getProduce().name().split("_")[0]+"_1" : patch.getProduce().name();
                         log.debug( patch_name + ": " + old + " -> " + id);
                         List<PatchType> types = Arrays.asList(PatchType.values()).stream().filter(t -> t.getStage() == id && t.getType().name().equals(patch_name)).collect(Collectors.toList());
                         if (types.stream().count() > 0) {
