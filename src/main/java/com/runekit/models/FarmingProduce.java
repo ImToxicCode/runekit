@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 public enum FarmingProduce {
     ALLOTMENT_1,
     ALLOTMENT_2,
+    HARD_WOOD_1,
+    HARD_WOOD_2,
+    HARD_WOOD_3,
     TREE,
     FLOWER,
     HERB,
@@ -15,7 +18,6 @@ public enum FarmingProduce {
     HESPORI,
     BUSH,
     HOPS,
-    SPECIAL_TREE,
     SPIRIT,
     CELASTRUS,
     REDWOOD,
