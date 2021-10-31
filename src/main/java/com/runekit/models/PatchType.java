@@ -82,8 +82,8 @@ public enum PatchType {
 
     CALQUAT("Calquat tree", FarmingProduce.CALQUAT, 4, 8 * 160),
     CELASTRUS("Celastrus tree", FarmingProduce.CELASTRUS, 8, 5 * 160),
-    TEAK("Teak tree", FarmingProduce.HARD_WOOD_1, 15, 7 * 640),
-    MAHOGANY("Mahogany tree", FarmingProduce.HARD_WOOD_1, 30, 8 * 640),
+    TEAK("Teak tree", FarmingProduce.HARDWOOD_1, 15, 7 * 640),
+    MAHOGANY("Mahogany tree", FarmingProduce.HARDWOOD_1, 30, 8 * 640),
 
     CRYSTAL("Crystal tree", FarmingProduce.CRYSTAL, 8, 6 * 80),
 
